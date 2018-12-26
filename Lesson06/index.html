@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>课06.Vuex的Getter</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script>
+            
+           const store = new Vuex.Store({
+                state: {
+                    todos:[
+                        {id:1, name:"读书1小时", done:false},
+                        {id:2, name:"B站看跟山地人学Vuex",done:true },
+                        {id:3, name:"找山地人加微信",done:true },
+                        {id:4, name:"反馈意见和建议",done:true },
+                        {id:5, name:"跑步1小时",done:false },
+                    ]
+                },
+                getters:{
+                    doneTodos(state){
+                        return state.todos.filter(todo=>todo.done)
+                    },
+                    doneTodosCount(state,getters){
+                        return  getters.doneTodos.length
+                    },
+                    getTodoById:(state)=>{
+                        return (id)=>{
+                            return state.todos.find(todo=>todo.id===id)
+                        }
+                    }
+                },
+                mutations: {
+                    increment (state) {
+                    state.count++
+                    }
+                }
+            })
+
+            const Counter = {
+                template:`<div>
+                    <div>
+                        当前任务-2：{{ curTodo.name }}
+                    </div>
+                    <p>
+                    今日已完成{{ doneTodosCount }}件事
+                    </p>
+                    <ul>
+                        <li v-for="todo in doneTodos" :key="todo.id">{{todo.name}}</li>
+                    </ul>
+                </div>`,
+                data(){
+                    return {
+                        start:5,
+                    }
+                },
+                // computed:{
+                //     doneTodos(){
+                //         return this.$store.getters.doneTodos
+                //     },
+                //     doneTodosCount(){
+                //         return this.$store.getters.doneTodosCount
+                //     },
+                //     curTodo(){
+                //         return this.$store.getters.getTodoById(2)
+                //     }
+                // },
+                computed:{
+                    ...Vuex.mapGetters(['doneTodos',"doneTodosCount"]),
+                    curTodo(){
+                        return this.$store.getters.getTodoById(2)
+                    }
+                }
+            }
+
+            const app = new Vue({
+                el:"#app",
+                store,
+                components:{ Counter },
+                template:`
+                    <div class="app">
+                        <counter></counter>
+                    </div>
+                `
+            })
+       
+
+        </script>
+    </body>
+</html>

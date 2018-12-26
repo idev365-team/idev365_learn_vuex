@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>课08.Vuex的Action</title>
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script>
+
+            const Counter = {
+                methods:Vuex.mapActions(["increment"]),
+                template:`
+                    <div>
+                        {{ $store.state.count }}
+                        <button @click="increment">Add</button>
+                    </div>
+                `
+
+            }
+            
+           const store = new Vuex.Store({
+                state: {
+                    count: 0
+                },
+                mutations: {
+                    increment (state) {
+                    state.count++
+                    }
+                },
+                actions:{
+                    increment(context){
+                        context.commit('increment')
+                    },
+                    async incrementAsync({ commit }){
+                       return new Promise((resolve,reject)=>{
+                        setTimeout(()=>{
+                            commit('increment')
+                            resolve()
+                        },3000)
+                       })
+                    }
+                }
+            })
+
+            const app = new Vue({
+                el:'#app',
+                store,
+                computed:Vuex.mapState(['count']),
+                components:{
+                    'counter':Counter,
+                },
+                template:`
+                    <div>
+                        <counter></counter>
+                    </div>
+                `
+            })
+
+            async function test(){
+                console.log("run in test 01")
+                await  store.dispatch("incrementAsync")
+                console.log("run in test 02")
+
+                await  store.dispatch("incrementAsync")
+                console.log("run in test 03")
+                store.dispatch('increment')
+                console.log("run in test 04")
+            }
+            
+            test()
+            
+
+        </script>
+    </body>
+</html>

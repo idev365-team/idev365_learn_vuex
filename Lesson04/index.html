@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>课04.Vuex中的State</title>
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script>
+            
+           const store = new Vuex.Store({
+                state: {
+                    count: 10,
+                    message:"Hello Vuex",
+                },
+                mutations: {
+                    increment (state) {
+                    state.count++
+                    }
+                }
+            })
+
+            const Counter = {
+                template:`<div>{{ sayHi }} {{ totalCount }} {{ count }} {{ message }}</div>`,
+                // computed:{
+                //     count(){
+                //         return this.$store.state.count
+                //     }
+                // }
+                data(){
+                    return {
+                        start:5,
+                    }
+                },
+                computed:{
+                    sayHi(){ return "Hi!" },
+                    ...Vuex.mapState({
+                        title:"count",
+                        count:(state)=>state.count,
+                        message:function(state){ return state.message },
+                        totalCount:function(state){
+                            return this.start+state.count
+                        }
+                    })
+                }
+            }
+
+            const app = new Vue({
+                el:"#app",
+                store,
+                components:{ Counter },
+                template:`
+                    <div class="app">
+                        <counter></counter>
+                    </div>
+                `
+            })
+       
+
+        </script>
+    </body>
+</html>

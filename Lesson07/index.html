@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>课07.Vuex的Mutation</title>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://unpkg.com/vuex"></script>
+    </head>
+    <div id="app"></div>
+    <script>
+
+        const INCREMENT = "INCREMENT"
+        const store = new Vuex.Store({
+            state:{
+                count:1,
+            },
+            mutations:{
+                [INCREMENT](state,payload){
+                    state.count += payload.amount
+                }
+            }
+        })
+
+        new Vue({
+            el:'#app',
+            store,
+            data:{
+                count:5
+            },
+            template:'',
+        })
+
+    </script>
+</html>

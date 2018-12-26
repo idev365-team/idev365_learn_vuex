@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title>课10.Vuex的Module(二)</title>
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+    </head>
+    <body>
+        <div id="app">
+
+        </div>
+        <script>
+
+          const moduleA = {
+               namespaced:true,
+               state:{
+                  count: 0,
+               },
+               mutations:{
+                   increment(state){
+                       state.count++;
+                   }
+               },
+               getters:{
+                   doubleCount(state){
+                       return state.count*2
+                   },
+                   sumWithRootCount(state,getters,rootState){
+                       return state.count+rootState.count
+                   }
+               },
+               actions:{
+                   incrementIfOddOnRooSum({ state,rootState,commit}){
+                       console.log(state.count,rootState.count,"---->",(state.count + rootState.count))
+                       if( (state.count + rootState.count)%2 ===1 ){
+
+                            commit("increment")
+                       }
+                   }
+               }
+            }
+            
+           const store = new Vuex.Store({
+               state:{
+                    count:1,
+               },
+                modules:{
+                    a:moduleA,
+                },
+            })
+
+            const app = new Vue({
+                el:"#app",
+                store,
+                computed:Vuex.mapState({
+                    count:function(state){
+                        console.log(state,"state")
+                        return state.count + state.a.count
+                    },
+                    double:function(state){
+                        console.log(this.$store.getters)
+                        return this.$store.getters["a/doubleCount"]
+                    }
+                }),
+                methods:{
+                    incrementIfOddOnRooSum(){
+                        this.$store.commit("a/increment")
+                    }
+                },
+                template:`
+                    <div>
+                        count:{{ count }}
+                        <div>double:{{ double }}</div>
+                        <button @click="incrementIfOddOnRooSum">incrementIfOddOnRooSum</button>
+                    </div>
+                `
+            })
+       
+
+        </script>
+    </body>
+</html>

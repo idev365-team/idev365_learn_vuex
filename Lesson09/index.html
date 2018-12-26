@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>课02.Vuex的安装</title>
+        <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+    </head>
+    <body>
+        <script>
+
+            const shopcartModule = {
+               state:{
+                count: 0,
+                shopcart:[
+                    {id:1,name:"课09.Vuex的Module",count:1},
+                    {id:1,name:"课08.Vuex的Action",count:1},
+                ],
+               },
+               mutations: {
+                    increment (state) {
+                    // 这里的 `state` 对象是模块的局部状态
+                    state.count++
+                    }
+                },
+
+                getters: {
+                    doubleCount (state) {
+                    return state.count * 2
+                    }
+                }
+            }
+
+            const homeModule ={
+                state:{
+                    cities:[
+                        "上海",
+                        "北京",
+                    ],
+                    home:{
+
+                    },
+                }
+            }
+
+            const userModule = {
+               state:{
+                    orders:[],
+                    user:{
+                        name:"山地人",
+                        gender:'male',
+                    },
+                    products:[],
+               }
+            }
+            
+           const store = new Vuex.Store({
+               modules:{
+                   shopcart:shopcartModule,
+                   home:homeModule,
+                   user:userModule,
+                },
+                mutations: {
+                    increment (state) {
+                    state.count++
+                    }
+                }
+            })
+       
+
+        </script>
+    </body>
+</html>
